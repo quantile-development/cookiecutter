@@ -1,0 +1,12 @@
+FROM jupyter/base-notebook:python-3.9.7
+
+# Environment variables
+ENV NB_GID=100
+ENV GRANT_SUDO=yes
+
+# Copy and install the requirements
+COPY ./requirements.txt /requirements.txt
+RUN pip install -r /requirements.txt
+
+# Disable notebook login
+CMD start-notebook.sh --NotebookApp.token='' --NotebookApp.password='' --ip 0.0.0.0 --allow-root

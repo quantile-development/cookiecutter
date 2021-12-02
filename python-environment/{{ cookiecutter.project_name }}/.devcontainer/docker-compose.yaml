@@ -1,0 +1,146 @@
+x-common-variables: &common-variables
+  QUANTILE: development
+  {%- if cookiecutter.include_postgres == 'y' %}
+  POSTGRES_USER: ${POSTGRES_USER} 
+  POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+  POSTGRES_DB: ${POSTGRES_DB} 
+  {%- endif %}
+
+services:
+  vscode:
+    build:
+      context: dockerfiles
+      dockerfile: vscode.Dockerfile
+    tty: true
+    volumes:
+      - ..:/{{ cookiecutter.workspace_folder }}:cached
+      - pip-cache:/root/.cache/pip:cached
+    environment:
+      <<: *common-variables
+      {%- if cookiecutter.include_meltano == 'y' %}
+      MELTANO_PROJECT_ROOT: /{{ cookiecutter.workspace_folder }}/meltano
+      MELTANO_DATABASE_URI: sqlite:////{{ cookiecutter.workspace_folder }}/meltano/.meltano/meltano.dbostgres
+      {%- endif %}
+
+  {%- if cookiecutter.include_postgres == 'y' %}
+  postgres:
+    image: postgres:14
+    environment:
+      <<: *common-variables
+      PGDATA: /data/postgres
+    volumes: 
+      - postgres:/data/postgres
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    volumes:
+        - pgadmin:/root/.pgadmin
+    ports: 
+      - 8080:80
+  {%- endif %}
+
+  {%- if cookiecutter.include_jupyter == 'y' %}    
+  jupyter:
+    build:
+      context: dockerfiles
+      dockerfile: jupyter.Dockerfile
+    user: root
+    ports:
+      - {{ cookiecutter.jupyter_port }}:8888
+    volumes:
+      - ..:/home/jovyan/work
+      - jupyter:/opt/conda
+    environment:
+      <<: *common-variables
+      NB_GID: 100
+      GRANT_SUDO: 'yes'
+  {%- endif %}
+
+#   dagster:
+#     build:
+#       context: ../dagster
+#     ports:
+#       - 1000:3000
+#     volumes:
+#       - ../dagster:/opt/dagster/app
+#       - ../meltano:/meltano
+#     environment:
+#       <<: *common-variables
+#       MELTANO_PROJECT_ROOT: /meltano
+#       MELTANO_DATABASE_URI: sqlite:////meltano/.meltano/meltano.db
+
+  # minio:
+  #   build:
+  #     context: dockerfiles
+  #     dockerfile: minio.Dockerfile
+  #   working_dir: /storage
+  #   volumes:
+  #     - ../data/buckets:/storage
+  #   ports:
+  #     - 9000:9000
+  #     - 9001:9001
+
+  # mlflow:
+  #   build:
+  #     context: dockerfiles
+  #     dockerfile: mlflow.Dockerfile
+  #   depends_on:
+  #     - minio
+  #   volumes:
+  #     - ../data/mlflow:/mlflow
+  #   environment:
+  #     FILE_DIR: /mlflow
+  #     MLFLOW_S3_ENDPOINT_URL: http://minio:9000
+  #     AWS_ACCESS_KEY_ID: minioadmin
+  #     AWS_SECRET_ACCESS_KEY: minioadmin
+  #   ports:
+  #     - 5000:5000
+
+  # elasticsearch:
+  #   image: elasticsearch:7.14.2
+  #   environment:
+  #     - discovery.type=single-node
+  #   ports:
+  #     - 9200:9200
+  #     - 9300:9300
+  #   volumes:
+  #     - ../data/elasticsearch:/usr/share/elasticsearch/data
+
+  # app:
+  #   build: ../app
+  #   command:
+  #     - sh
+  #     - -c
+  #     - ./generate_env.sh > ./public/config.js && yarn start
+  #   volumes:
+  #     - ../app:/app
+  #   ports:
+  #     - 4000:3000
+  #   stdin_open: true
+  #   environment:
+  #     - CHOKIDAR_USEPOLLING=true
+  #     - API_URL=http://localhost:4001/
+
+  # api:
+  #   build: ../api
+  #   command: ["/start-reload.sh"]
+  #   depends_on:
+  #     - elasticsearch
+  #   volumes:
+  #     - ../api:/app
+  #   ports:
+  #     - 4001:80
+
+volumes:
+  pip-cache:
+  {%- if cookiecutter.include_postgres == 'y' %}
+  postgres:
+  pgadmin:
+  {%- endif %}
+  {%- if cookiecutter.include_jupyter == 'y' %}
+  jupyter:
+  {%- endif %}

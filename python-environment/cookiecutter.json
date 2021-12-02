@@ -1,0 +1,9 @@
+{
+    "project_name": "python-project",
+    "workspace_folder": "{{ cookiecutter.project_name }}",
+    "custom_footer_color": "n",
+    "include_postgres": "n", 
+    "include_meltano": "n",
+    "include_jupyter": "n",
+    "jupyter_port": 8888
+}

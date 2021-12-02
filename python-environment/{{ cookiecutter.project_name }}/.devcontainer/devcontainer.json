@@ -1,0 +1,73 @@
+{
+    "name": "{{cookiecutter.project_name}}",
+    "dockerComposeFile": "docker-compose.yaml",
+    "service": "vscode",
+    "shutdownAction": "stopCompose",
+    "extensions": [
+        "ms-python.vscode-pylance",
+        "njpwerner.autodocstring",
+        "github.copilot",
+        "zhuangtongfa.material-theme",
+        "bungcip.better-toml",
+    ],
+    "workspaceFolder": "/{{ cookiecutter.workspace_folder }}",
+    "postCreateCommand": "pip install -r /requirements.txt",
+    "settings": {
+        "python.linting.ignorePatterns": [
+            "**/site-packages/**/*.py",
+        ],
+        "files.exclude": {
+            "**/.git": true,
+            "**/.svn": true,
+            "**/.hg": true,
+            "**/CVS": true,
+            "**/.DS_Store": true,
+            "**/.pytest_cache": true,
+            "**/__pycache__": true,
+            "**/node_modules": true,
+            ".ipynb_checkpoints": true,
+            "**.egg-info": true,
+            "**/build": true,
+            "dist": true,
+            "dask-worker-space": true,
+            "**/__init__.py": true
+        },
+        "terminal.integrated.cursorStyle": "line",
+        "terminal.integrated.copyOnSelection": true,
+        "terminal.integrated.cursorBlinking": true,
+        "terminal.integrated.fontSize": 15,
+        "terminal.integrated.fontFamily": "Cascadia Mono",
+        "editor.autoClosingQuotes": "never",
+        "python.testing.unittestEnabled": false,
+        "python.testing.pytestEnabled": true,
+        "python.testing.autoTestDiscoverOnSaveEnabled": true,
+        "workbench.colorTheme": "One Dark Pro",
+        "git.decorations.enabled": false,
+        "editor.formatOnSave": true,
+        "python.formatting.provider": "black",
+        "python.formatting.blackArgs": [
+            "--line-length",
+            "100",
+            "-S",
+            "--fast",
+        ],
+        "python.sortImports.args": [
+            "--profile",
+            "black"
+        ],
+        "[python]": {
+            "editor.codeActionsOnSave": {
+                "source.organizeImports": true
+            }
+        },
+        {%- if cookiecutter.custom_footer_color == "y" %}
+        "workbench.colorCustomizations": {
+            "statusBar.background": "#eca807",
+            "statusBar.foreground": "#252422",
+            "statusBarItem.hoverBackground": "#b48005",
+            "statusBarItem.remoteBackground": "#df9c02",
+            "statusBarItem.remoteForeground": "#000000"
+        },
+        {%- endif %}
+    }
+}   
