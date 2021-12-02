@@ -1,0 +1,4 @@
+{%- set requirements = cookiecutter.python_packages.split(' ') %}
+{%- for requirement in requirements %}
+{{ requirement }}
+{%- endfor %} 
