@@ -1,0 +1,1 @@
+FROM quantiledevelopment/vscode-javascript

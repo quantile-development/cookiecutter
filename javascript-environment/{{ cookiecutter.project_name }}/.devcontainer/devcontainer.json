@@ -1,0 +1,47 @@
+{
+    "name": "{{cookiecutter.project_name}}",
+    "dockerComposeFile": "docker-compose.yaml",
+    "service": "vscode",
+    "shutdownAction": "stopCompose",
+    "extensions": [
+        "esbenp.prettier-vscode",
+        "github.copilot",
+        "zhuangtongfa.material-theme",
+    ],
+    "workspaceFolder": "/{{ cookiecutter.workspace_folder }}",
+    // "postCreateCommand": "pip install -r /requirements.txt",
+    "settings": {
+        "files.exclude": {
+            "**/.git": true,
+            "**/.svn": true,
+            "**/.hg": true,
+            "**/CVS": true,
+            "**/.DS_Store": true,
+            "**/node_modules": true,
+            "**.egg-info": true,
+            "**/build": true,
+            "dist": true,
+        },
+        "terminal.integrated.cursorStyle": "line",
+        "terminal.integrated.copyOnSelection": true,
+        "terminal.integrated.cursorBlinking": true,
+        "terminal.integrated.fontSize": 15,
+        "terminal.integrated.fontFamily": "Cascadia Mono",
+        "editor.autoClosingQuotes": "never",
+        "workbench.colorTheme": "One Dark Pro",
+        "git.decorations.enabled": false,
+        "editor.formatOnSave": false,
+        "[javascript]": {
+            "editor.formatOnSave": true
+        }
+        {%- if cookiecutter.custom_footer_color == "y" %}
+        "workbench.colorCustomizations": {
+            "statusBar.background": "#eca807",
+            "statusBar.foreground": "#252422",
+            "statusBarItem.hoverBackground": "#b48005",
+            "statusBarItem.remoteBackground": "#df9c02",
+            "statusBarItem.remoteForeground": "#000000"
+        },
+        {%- endif %}
+    }
+}   

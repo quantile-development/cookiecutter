@@ -1,10 +1,6 @@
 FROM quantiledevelopment/vscode
 
-# Install required packages
-RUN apt-get update && apt-get install -y \
-    gcc
-
-# Install all required packages
+# Copy the requirements file
 COPY ./requirements.txt /requirements.txt
 
 {% if cookiecutter.include_meltano == 'y' %}

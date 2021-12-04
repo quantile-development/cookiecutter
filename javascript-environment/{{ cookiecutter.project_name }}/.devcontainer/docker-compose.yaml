@@ -1,0 +1,45 @@
+x-common-variables: &common-variables
+  QUANTILE: development
+  {%- if cookiecutter.include_postgres == 'y' %}
+  POSTGRES_USER: ${POSTGRES_USER} 
+  POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+  POSTGRES_DB: ${POSTGRES_DB} 
+  {%- endif %}
+
+services:
+  vscode:
+    build:
+      context: dockerfiles
+      dockerfile: vscode.Dockerfile
+    tty: true
+    volumes:
+      - ..:/{{ cookiecutter.workspace_folder }}:cached
+    environment:
+      <<: *common-variables
+
+  {%- if cookiecutter.include_postgres == 'y' %}
+  postgres:
+    image: postgres:14
+    environment:
+      <<: *common-variables
+      PGDATA: /data/postgres
+    volumes: 
+      - postgres:/data/postgres
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    volumes:
+        - pgadmin:/root/.pgadmin
+    ports: 
+      - 8080:80
+  {%- endif %}
+
+volumes:
+  {%- if cookiecutter.include_postgres == 'y' %}
+  postgres:
+  pgadmin:
+  {%- endif %}

@@ -1,0 +1,6 @@
+{
+    "project_name": "javascript-project",
+    "workspace_folder": "{{ cookiecutter.project_name }}",
+    "custom_footer_color": "n",
+    "include_postgres": "n"
+}
