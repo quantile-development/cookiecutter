@@ -1,4 +1,4 @@
-FROM quantiledevelopment/vscode
+FROM quantiledevelopment/vscode-python:3.9
 
 # Copy the requirements file
 COPY ./requirements.txt /requirements.txt
