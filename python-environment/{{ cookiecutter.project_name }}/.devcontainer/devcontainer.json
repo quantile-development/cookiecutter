@@ -9,6 +9,7 @@
         "github.copilot",
         "zhuangtongfa.material-theme",
         "bungcip.better-toml",
+        "redhat.vscode-yaml"
     ],
     "workspaceFolder": "/{{ cookiecutter.workspace_folder }}",
     "postCreateCommand": "pip install -r /requirements.txt",
